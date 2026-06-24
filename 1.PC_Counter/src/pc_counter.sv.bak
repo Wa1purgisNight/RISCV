@@ -1,11 +1,11 @@
 module pc_counter 
-	#(parameter IWidth = 32)
+	#(parameter Awidth = 32)
 (	
 	input	logic			clk,
 	input	logic			rst_n,
 	input	logic			jump_en,
-	input	logic[Iwidth-1:0]	jump_addr,
-	output	logic[Iwidth-1:0]	pc_pointer
+	input	logic[Awidth-1:0]	jump_addr,
+	output	logic[Awidth-1:0]	pc_pointer
 
 );
 

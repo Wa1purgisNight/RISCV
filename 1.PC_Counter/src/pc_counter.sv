@@ -12,7 +12,7 @@ module pc_counter
 always_ff@(posedge clk or negedge rst_n)
 	if(!rst_n)
 		pc_pointer <= 'h0;
-	else if(jump_addr)
+	else if(jump_en)
 		pc_pointer <= jump_addr;
 	else
 		pc_pointer <= pc_pointer + 'h4;

@@ -3,6 +3,7 @@ module id2ex #(
 	parameter DWidth = 32)(
 	input logic[AWidth-1:0] instr_addr_in,
 	input logic[DWidth-1:0] instr_in,
+	input logic[DWidth-1:0] instr_flush,
 	input logic[DWidth-1:0] op1_in,
 	input logic[DWidth-1:0] op2_in,
 
@@ -14,16 +15,24 @@ module id2ex #(
 
 always_ff@(posedge clk or negedge rst_n) begin
 	if(!rst_n)begin
-	instr_addr_out <= 'h0;
-	instr_out <= 'h0;
-	op1_out <= 'h0;
-	op2_out <= 'h0;
+	instr_addr_out <= '0;
+	instr_out <= '0;
+	op1_out <= '0;
+	op2_out <= '0;
 	end
+	else if(instr_flush) begin
+	instr_addr_out <= '0;
+	instr_out <= '0; //nop
+	op1_out <= (DWidth-1)'h00000013;
+	op2_out <= '0;
+	end
+	else begin
 	instr_addr_out <= instr_addr_in;
 	instr_out <= instr_in;
 	op1_out <= op1_in;
 	op2_out <= op2_in;
-	else
+	end
+
 
 end
 
