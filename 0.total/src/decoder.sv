@@ -1,5 +1,6 @@
 module decoder#(
-	parameter DWidth = 32)(
+	parameter DWidth = 32,
+	parameter AWidth = 32)(
 	input logic[DWidth-1:0] instr_in,
 	input logic[AWidth-1:0] instradd_in,
 	output logic[4:0] rd_rs1_addr, //write to register file
@@ -33,8 +34,8 @@ assign funct7 = instr_in[31:25];
 always_comb begin //some problem in bit width
 	case(opcode)
 		7'b0010011,7'b0000011,7'b1100111,7'b1110011: imm = {{20{instr_in[31]}}, instr_in[31:20]};//I-type
-		7'b0100011: imm = {{20{instr_in[31]},instr_in[31:25],instr_in[11:7]};//S-type
-		7'b1100011: imm = {{19{instr_in[31]},instr_in[31],instr_in[7],instr_in[30:25],instr_in[11:8],1'b0};//B-type
+		7'b0100011: imm = {{20{instr_in[31]}},instr_in[31:25],instr_in[11:7]};//S-type
+		7'b1100011: imm = {{19{instr_in[31]}},instr_in[31],instr_in[7],instr_in[30:25],instr_in[11:8],1'b0};//B-type
 		7'b0110111,7'b0010111: imm = {instr_in[31:12], 12'b0};//U-type
 		7'b1101111: imm = {{11{instr_in[31]}},instr_in[31],instr_in[19:12],instr_in[20],instr_in[30:21],1'b0};//J-type  
 		default: imm = '0;
@@ -67,7 +68,7 @@ always_comb begin
             	rd_rs2_addr = 5'b0;
 
             	op1_out = rd_rs1_data;
-            	op2_out = imm_i;
+            	op2_out = imm;
         	end
 
         	// LOAD
@@ -78,7 +79,7 @@ always_comb begin
             	rd_rs2_addr = 5'b0;
 
             	op1_out = rd_rs1_data;
-            	op2_out = imm_i;
+            	op2_out = imm;
         	end
 
 
@@ -90,7 +91,7 @@ always_comb begin
             	rd_rs2_addr = rs2;
 
             	op1_out = rd_rs1_data;
-            	op2_out = imm_s;
+            	op2_out = imm;
         	end
 
         	7'b1100011: begin
@@ -109,7 +110,7 @@ always_comb begin
             	rd_rs2_addr = 5'b0;
 
             	op1_out = '0;
-            	op2_out = imm_j;
+            	op2_out = imm;
         	end
 
 
@@ -120,7 +121,7 @@ always_comb begin
             	rd_rs2_addr = 5'b0;
 
             	op1_out = rd_rs1_data;
-            	op2_out = imm_i;
+            	op2_out = imm;
         	end
 
 
@@ -131,19 +132,19 @@ always_comb begin
             	rd_rs2_addr = 5'b0;
 
             	op1_out = '0;
-            	op2_out = imm_u;
+            	op2_out = imm;
         	end
 
 
         	// AUIPC
         	// rd = PC + U-type immediate
-        	// PC ? ALU ?? instr_addr_in ??
+        	// PC = instr_addr_in 
         	7'b0010111: begin
             	rd_rs1_addr = 5'b0;
             	rd_rs2_addr = 5'b0;
 
             	op1_out = '0;
-            	op2_out = imm_u;
+            	op2_out = imm;
         	end
 
 

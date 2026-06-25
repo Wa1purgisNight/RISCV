@@ -1,8 +1,10 @@
 +incdir+./../src
 +incdir+./
 
-
-./../src/dut.sv
-./../src/my_if.sv
-./../src/my_driver.sv
-./../src/top_tb.sv
+./top_tb.sv
+./../src/pc_counter.sv
+./../src/InstructionRom.sv
+./../src/if2id.sv
+./../src/decoder.sv
+./../src/registerFile.sv
+./../src/id2ex.sv

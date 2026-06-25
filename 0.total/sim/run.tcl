@@ -8,11 +8,14 @@ vlib work
 
 vlog -sv -f filelist.f
 
-vsim  work.top_tb
+vsim -voptargs=+acc work.top_tb
+#vsim  work.top_tb
 
 view wave
+delete wave *
+
 add wave -divider "TOP"
-add wave -r /top_tb/*
+add wave /top_tb/*
 
 #add wave -divider "DUT"
 #add wave -r /top_tb/dut/*

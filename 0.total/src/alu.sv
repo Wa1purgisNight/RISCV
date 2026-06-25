@@ -1,7 +1,7 @@
 module alu #(
 	parameter AWidth = 32,
 	parameter DWidth = 32)(
-	input logic[AWidth-1:0] instr_addr_in,
+	input logic[AWidth-1:0] instr_addr_in, //PC
 	input logic[DWidth-1:0] instr_in,
 	input logic[DWidth-1:0] op1_in,
 	input logic[DWidth-1:0] op2_in,
