@@ -15,7 +15,7 @@ initial begin
 	$readmemh(full_path,rom_mem);
 end
 
-logic[AWidth-1:0]  rom_mem[7:0];
+logic[AWidth-1:0]  rom_mem[4095:0];
 
 always_comb
 	InstrCode = rom_mem[InstrAddr[AWidth-1:2]];

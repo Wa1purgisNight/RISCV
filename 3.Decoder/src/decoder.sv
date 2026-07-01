@@ -2,7 +2,7 @@ module decoder#(
 	parameter DWidth = 32,
 	parameter AWidth = 32)(
 	input logic[DWidth-1:0] instr_in,
-	input logic[AWidth-1:0] instradd_in,
+	//input logic[AWidth-1:0] instradd_in,
 	output logic[4:0] rd_rs1_addr, //write to register file
 	output logic[4:0] rd_rs2_addr,  
 
@@ -12,7 +12,8 @@ module decoder#(
 	input logic[DWidth-1:0] rd_rs2_data,
 
 	output logic[DWidth-1:0] op1_out,
-	output logic[DWidth-1:0] op2_out
+	output logic[DWidth-1:0] op2_out,
+	output logic[DWidth-1:0] rs2_data_out
 );
 
 logic[6:0] opcode;
@@ -21,7 +22,7 @@ logic[2:0] funct3;
 logic[4:0] rs1;
 logic[4:0] rs2;
 logic[6:0] funct7;
-logic[31:0] imm;
+logic[DWidth-1:0] imm;
 
 
 assign opcode = instr_in[6:0];
@@ -49,7 +50,7 @@ always_comb begin
     	rd_rs2_addr = 5'b0;
     	op1_out     = '0;
     	op2_out     = '0;
-
+	rs2_data_out= '0;
     	case (opcode)
         	// R-type ALU
         	// ADD, SUB, SLL, SLT, SLTU, XOR, SRL, SRA, OR, AND
@@ -91,9 +92,11 @@ always_comb begin
             	rd_rs2_addr = rs2;
 
             	op1_out = rd_rs1_data;
-            	op2_out = imm;
+            	op2_out = imm; 
+		rs2_data_out = rd_rs2_data;
         	end
 
+		// BRANCH
         	7'b1100011: begin
             	rd_rs1_addr = rs1;
             	rd_rs2_addr = rs2;

@@ -9,11 +9,13 @@ module id2ex #(
 	input logic[DWidth-1:0] instr_in,
 	input logic[DWidth-1:0] op1_in,
 	input logic[DWidth-1:0] op2_in,
+	input logic[DWidth-1:0] rs2_data_in,
 
 	output logic[AWidth-1:0] instr_addr_out,
 	output logic[DWidth-1:0] instr_out,
 	output logic[DWidth-1:0] op1_out,
-	output logic[DWidth-1:0] op2_out
+	output logic[DWidth-1:0] op2_out,
+	output logic[DWidth-1:0] rs2_data_out
 	);
 
 always_ff@(posedge clk or negedge rst_n) begin
@@ -22,18 +24,21 @@ always_ff@(posedge clk or negedge rst_n) begin
 	instr_out <= '0;
 	op1_out <= '0;
 	op2_out <= '0;
+	rs2_data_out <= '0;
 	end
 	else if(instr_flush) begin
 	instr_addr_out <= '0;
 	instr_out <= 32'h00000013; //nop
 	op1_out <= '0;
 	op2_out <= '0;
+	rs2_data_out <= '0;
 	end
 	else begin
 	instr_addr_out <= instr_addr_in;
 	instr_out <= instr_in;
 	op1_out <= op1_in;
 	op2_out <= op2_in;
+	rs2_data_out <= rs2_data_in;
 	end
 
 

@@ -15,7 +15,7 @@ view wave
 delete wave *
 
 add wave -divider "TOP"
-add wave /top_tb/*
+add wave /top_tb/RiscV_inst/*
 
 #add wave -divider "DUT"
 #add wave -r /top_tb/dut/*
