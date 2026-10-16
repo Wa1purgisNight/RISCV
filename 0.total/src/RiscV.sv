@@ -8,8 +8,7 @@ module RiscV#(
 );
 
 
-logic jump_en, instr_flush;
-logic[AWidth-1:0] jump_addr;
+
 logic[AWidth-1:0] InstrAddr;
 logic[DWidth-1:0] InstrCode;
 logic[AWidth-1:0] InstrAddr_if2id;
@@ -24,25 +23,21 @@ logic[DWidth-1:0] op1_out_decoder;
 logic[DWidth-1:0] op2_out_decoder;
 logic[DWidth-1:0] rs2_data_out_decoder;
 
-logic wr_en;
-logic[$clog2(AWidth)-1:0] wr_addr;
-logic[DWidth-1:0] wr_data;
-
 logic[AWidth-1:0] instr_addr_id2ex;
 logic[DWidth-1:0] instr_id2ex;
 logic[DWidth-1:0] op1_id2ex;
 logic[DWidth-1:0] op2_id2ex;
 logic[DWidth-1:0] rs2_data_id2ex;
 
-initial begin
-	instr_flush = 1'b0;
-	wr_en = 1'b1;
-	wr_addr = '0;
-	wr_data = '0;
-end
-
-assign jump_en = '0;
-assign jump_addr = '0;
+logic jump_en;
+logic[AWidth-1:0] jump_addr;
+logic wr_en;
+logic[$clog2(AWidth)-1:0] wr_addr;
+logic[DWidth-1:0] wr_data;
+logic	[AWidth-1:0]	rd_ram_addr;
+logic			wr_ram_en;
+logic	[AWidth-1:0]	wr_ram_addr;
+logic	[DWidth-1:0]	wr_ram_data;
 
 pc_counter  #(.AWidth(AWidth))
 
@@ -73,7 +68,7 @@ if2id#(
 	my_if2id(
 	.clk(clk),
 	.rst_n(rst),
-	.instr_flush(instr_flush),
+	.instr_flush(jump_en),
 	.instradd_in(InstrAddr),
 	.instr_in(InstrCode),
 	.instradd_out(InstrAddr_if2id),
@@ -124,7 +119,7 @@ id2ex #(
 	.rst_n(rst),
 	.instr_addr_in(InstrAddr_if2id),
 	.instr_in(InstrCode_if2id),
-	.instr_flush(instr_flush),
+	.instr_flush(jump_en),
 	.op1_in(op1_out_decoder),
 	.op2_in(op2_out_decoder),
 	.rs2_data_in(rs2_data_out_decoder),
@@ -134,6 +129,31 @@ id2ex #(
 	.op1_out(op1_id2ex),
 	.op2_out(op2_id2ex),
 	.rs2_data_out(rs2_data_id2ex)
+	);
+
+
+alu #(
+	.AWidth(AWidth),
+	.DWidth(DWidth)) 
+
+	my_alu(
+	.instr_addr_in(instr_addr_id2ex), //PC
+	.instr_in(instr_id2ex),
+	.op1_in(op1_id2ex),
+	.op2_in(op2_id2ex),
+	.rs2_data(rs2_data_id2ex),
+
+	.wr_en(wr_en),
+	.wr_addr(wr_addr),
+	.wr_data(wr_data),
+	.jump_en(jump_en), //flush
+	.jump_addr(jump_addr),
+
+  	//ram
+  	.rd_ram_addr(rd_ram_addr),
+  	.wr_ram_en(wr_ram_en),
+  	.wr_ram_addr(wr_ram_addr),
+  	.wr_ram_data(wr_ram_data)
 	);
 
 

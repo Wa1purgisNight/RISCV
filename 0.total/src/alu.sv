@@ -48,8 +48,8 @@ assign jump_imm = (instr_addr_in + imm_b);
 always_comb begin
     wr_data   = '0;
     wr_addr   = '0;
-    wr_en     = 1'b0;
-    jump_en   = 1'b0;
+    wr_en     = '0;
+    jump_en   = '0;
     jump_addr = '0;
     rd_ram_addr = '0;
     wr_ram_en = '0;

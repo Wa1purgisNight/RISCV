@@ -1,0 +1,10 @@
+{
+    "name": "0.total",
+    "targets": {
+        "rtl": {
+            "libraryMapping": {
+                "": "work"
+            }
+        }
+    }
+}
